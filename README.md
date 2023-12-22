@@ -26,34 +26,32 @@ interface to interact with a MongoDB database. With its intuitive syntax and pow
 
 To get started with the codebase, follow these steps:
 
-1. Install the necessary dependencies, including `pymongo`, by running the command: `pip install pymongo`.
+1. Install the necessary dependencies, including `pymongo`, by running the command: `pip install pymongo universaldb`.
 
 2. Import the codebase into your project by including the following import statements:
 
 ```python
-import sys
-import pymongo
-from typing import Any
-# Add additional imports if needed# Initialize the client with your MongoDB connection URL
-db = init("mongodb://localhost:27017/")
+import universaldb as udb
 
-# Access a specific database and collection
-collection = db["test"]["employees"]
+if __name__ == "__main__":
+    # ---------- INIT
+    db = udb("mongodb://localhost:27017/")  # use os.env variable in production!
 
-# Print all documents in the collection
-collection.print()
+    # ---------- DB->Collection
+    employees = db["test"]['employees']
 
-# Insert a new document into the collection
-new_document = {"name": "John Doe", "age": 30}
-collection += new_document
+    # ---------- ADD DOCUMENT
+    employees += {"name": "nikhil swami", "age": 23, "gender": "male", "salary": 10}
+    print(employees)  # updated
 
-# Retrieve a single document from the collection
-document = collection[{"name": "John Doe"}]
-print(document)
+    # ---------- FIND DOCUMENT
+    print(employees[{"name": "nikhil swami"}])  # returns cursor object which is a generator, can convert to list
+    print(list(employees[{"age": {"$lt": 25}}]))  # conditions supported just pass dict
+    print(employees[{"age": {"$lt": 25}}][0])  # slicing supported
 
-# Retrieve multiple documents from the collection
-documents = collection.many[{"age": {"$gte": 25}}]
-print(documents)
+    # ---------- ALTERNATIVE PRINT
+    employees.print(limit=3, reversed=True)  #  with limit and reverse, new line per doc
+
 ```
 
 # Contributing

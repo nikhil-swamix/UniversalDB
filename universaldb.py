@@ -22,10 +22,8 @@ class _Collection:
         return self
 
     def __getitem__(self, item):
-        if self.selector_mode == "one":
-            return self.collection.find_one(item)
-        elif self.selector_mode == "many":
-            return self.collection.find(item)
+
+        return self.collection.find(item)
 
     def __getattribute__(self, name):
         if name == "many":
